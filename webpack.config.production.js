@@ -3,6 +3,8 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import merge from 'webpack-merge';
 import baseConfig from './webpack.config.base';
 
+let extractCSS = new ExtractTextPlugin('style.css', { allChunks: true });
+
 const config = merge(baseConfig, {
   devtool: 'cheap-module-source-map',
 
@@ -15,19 +17,8 @@ const config = merge(baseConfig, {
   module: {
     loaders: [
       {
-        test: /\.global\.css$/,
-        loader: ExtractTextPlugin.extract(
-          'style-loader',
-          'css-loader'
-        )
-      },
-
-      {
-        test: /^((?!\.global).)*\.css$/,
-        loader: ExtractTextPlugin.extract(
-          'style-loader',
-          'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
-        )
+        test: /\.scss$/i,
+        loader: extractCSS.extract(['css','sass'])
       }
     ]
   },
@@ -43,7 +34,8 @@ const config = merge(baseConfig, {
         warnings: false
       }
     }),
-    new ExtractTextPlugin('style.css', { allChunks: true })
+    extractCSS
+    // new ExtractTextPlugin('style.css', { allChunks: true })
   ],
 
   target: 'electron-renderer'

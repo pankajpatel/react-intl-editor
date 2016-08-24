@@ -22,19 +22,8 @@ export default merge(baseConfig, {
   module: {
     loaders: [
       {
-        test: /\.global\.css$/,
-        loaders: [
-          'style-loader',
-          'css-loader?sourceMap'
-        ]
-      },
-
-      {
-        test: /^((?!\.global).)*\.css$/,
-        loaders: [
-          'style-loader',
-          'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
-        ]
+        test: /\.scss$/,
+        loaders: ["style", "css", "sass"]
       }
     ]
   },

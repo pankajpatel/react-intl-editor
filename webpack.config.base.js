@@ -18,7 +18,11 @@ export default {
   },
   resolve: {
     extensions: ['', '.js', '.jsx', '.json'],
-    packageMains: ['webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main']
+    packageMains: ['webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main'],
+    // modulesDirectories: [
+    //   'app',
+    //   'node_modules'
+    // ],
   },
   plugins: [
 
