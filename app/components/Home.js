@@ -1,115 +1,124 @@
-/* globals FileReader, alert */
+/* globals document */
+import R from 'ramda'
 import React from 'react'
 import reactStamp from 'react-stamp'
+import { connect } from 'react-redux'
+import * as fileMod from 'redux/modules/files.mod'
+import * as tuMod from 'redux/modules/transunit.mod'
 
-// import { Link } from 'react-router'
-// <Link to="/counter">to Counter</Link>
+import { setDirty } from 'lib/dirty'
 
-const { object, func } = React.PropTypes
+import Files from './files.js'
+import List from './list'
+import Search from './search'
 
-function storeFileContent(name, file, store) {
-  const reader = new FileReader();
+const { object } = React.PropTypes
 
-  reader.onload = function(e) {
-    const text = e.target.result;
-    try {
-      const data = JSON.parse(text)
-      store(name, file, data)
-    } catch(e) {
-      console.error(e)
-      alert("Fichier non conforme")
-    }
-  };
+function makeFile(filename, transunits) {
+  var data = R.pipe(
+    R.values,
+    R.map( tu => ([ tu.id, tu.message ])),
+    R.fromPairs
+  )(transunits)
 
-  reader.readAsText(file);
+  var text = JSON.stringify(data, null, "\t")
+  var elem = document.createElement('a')
+  elem.setAttribute('href', 'data:application/jsoncharset=utf-8,' + encodeURI(text))
+  elem.setAttribute('download', filename)
+  elem.click()
+  elem.remove()
+
+  setDirty(false)
 }
 
-function parseFileContent(name, str) {
-  
-}
-
-export default reactStamp(React).compose({
+const Home = reactStamp(React).compose({
 
   propTypes: {
-    files    : object.isRequired,
-    storeFile: func.isRequired,
+    files: object.isRequired,
+    transunits: object,
   },
 
-  fileChanged(evt, name) {
-    const files = evt.target.files;
-    const { storeFile } = this.props
-    if (!files.length) return; // + clear, etc...
-    storeFileContent(name, files[0], storeFile)
+  init() {
+    this.downloadFile = this.downloadFile.bind(this)
+  },
+
+  downloadFile() {
+    const { files: { catalog }, transunits } = this.props
+    makeFile(catalog.name, transunits)
+  },
+
+  hasTransunits() {
+    const { transunits } = this.props
+    const nb = transunits && R.keys(transunits).length || 0
+    return nb > 0
   },
 
   render() {
-    const { files: { defaultMsg, catalog }} = this.props
+    const hasTu = this.hasTransunits()
     return (
-      <div>
-        <h2>Translation Editor</h2>
-        <div>
-          <input type="file" accept=".json" onChange={ (e) => this.fileChanged(e, 'defaultMsg') } />
-          {
-            defaultMsg && <span>{ defaultMsg.name }</span>
-          }
-          <input type="file" accept=".json" onChange={ (e) => this.fileChanged(e, 'catalog') } />
-        </div>
+      <div className="flex-column">
+        <header className="flex-content">
+          <div className="flex-row">
+            <div className="flex-content">
+              <img src="./images/icon-xs.png" className="logo"/>
+            </div>
+            <div className="flex-1">
+              <h1>Translation editor</h1>
+            </div>
+            <div className="flex-content">
+              { hasTu && this.renderSave() }
+            </div>
+          </div>
+        </header>
 
+        <section className="flex-content">
+          <Files/>
+        </section>
+        { hasTu && this.renderSearch() }
+        { hasTu && this.renderList() }
       </div>
     );
+  },
+
+  renderSave() {
+    return (
+      <a className="btn" onClick={ this.downloadFile }>
+        <i className="fa fa-fw fa-download"/> Save
+      </a>
+    )
+  },
+
+  renderSearch() {
+    if (!this.hasTransunits()) return
+    return (
+      <section className="flex-content">
+        <div className="panel">
+          <Search />
+        </div>
+      </section>
+    )
+  },
+
+  renderList() {
+    if (!this.hasTransunits()) return
+    return (
+      <section className="flex-1 flex-column">
+        <List />
+      </section>
+    )
   }
-// }
+
 })
 
 /*
-export default reactStamp(React).compose({
+  Container
+ */
 
-  displayName: 'Home',
+ function stateToProps(state) {
+   return {
+     files     : fileMod.getFiles(state),
+     transunits: tuMod.getTransunits(state)
+   };
+ }
 
-  propTypes: {
-    files    : object.isRequired,
-    openFile : func.isRequired,
-    storeFile: func.isRequired,
-  },
-
-  fileChanged(evt) {
-    const files = evt.target.files;
-    console.log(files);
-    if (!files.length) return; // + clear, etc...
-    const file = files[0]
-    // const el = this.refs[refName]
-
-    console.log(file);
-    const reader = new FileReader();
-
-    reader.onload = function(e) {
-      const text = e.target.result;
-
-      try {
-        const data = JSON.parse(text)
-        console.log('JSON', data);
-      } catch(e) {
-        console.log('Fichier non valide')
-      }
-    };
-
-    reader.readAsText(file);
-
-  },
-
-  render() {
-    return (
-      <div>
-        <h2>Translation Editor</h2>
-
-        <div>
-          <input type="file" onChange={ (e) => this.fileChanged(e, 'default') } />
-          <input type="file" onChange={ (e) => this.fileChanged(e, 'catalog') } />
-        </div>
-
-      </div>
-    );
-  }
-
-})
-*/
+ export default connect(stateToProps)(Home);

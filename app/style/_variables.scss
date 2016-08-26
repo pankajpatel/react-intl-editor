@@ -1,5 +1,21 @@
 
+$body-color:    #444444 !default;
 
-$spacer:    1rem;
-$spacer-sm: $spacer / 2;
-$spacer-xs: $spacer / 4;
+$brand-primary: #00a7d6 !default;
+$brand-success: #5cb85c !default;
+$brand-info:    #5bc0de !default;
+$brand-warning: #f0ad4e !default;
+$brand-danger:  #d9534f !default;
+
+$gray-dark:     #373a3c !default;
+$gray:          #55595c !default;
+$gray-light:    #818a91 !default;
+$gray-lighter:  #dcdedf !default;
+$gray-lightest: #FAFAFA;
+
+
+$spacer:    (1rem) !default;
+$spacer-sm: ($spacer / 2) !default;
+$spacer-xs: ($spacer / 4) !default;
+
+$radius: .15rem !default;

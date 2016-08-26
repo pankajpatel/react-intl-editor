@@ -1,0 +1,24 @@
+
+.transunits {
+
+}
+
+.transunit {
+  padding: 0 $spacer-xs;
+  border-left: 3px solid transparent;
+  margin-bottom: $spacer-sm;
+
+  &.list-row {
+    background: $gray-lightest;
+    color: $body-color;
+  }
+
+  &.has-error {
+    border-color: $brand-danger;
+  }
+  &.has-success {
+    border-color: $brand-success;
+  }
+
+  textarea { min-height: 100%; }
+}

@@ -1,0 +1,39 @@
+
+@mixin formControls() {
+  display: inline-block;
+  width: 100%;
+  font-size: 1rem;
+  line-height: 1.25rem;
+  padding: $spacer-xs $spacer-sm;
+  color: inherit;
+  box-sizing: border-box;
+}
+
+
+.form-control {
+  @include formControls();
+  border: none;
+  box-shadow: 0 1px $gray-lighter;
+
+  &:focus {
+    box-shadow: 0 1px $brand-primary;
+    outline: none;
+  }
+}
+
+.form-control-static {
+  @include formControls();
+}
+
+.input-group {
+  display: flex;
+  flex-direction: row;
+
+  > * { flex: 1; }
+
+  &-addon {
+    @include formControls();
+    flex: 0 1 1rem;
+  }
+
+}

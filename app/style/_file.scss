@@ -1,0 +1,32 @@
+
+.file-loader {
+
+  &:first-child { margin-right: $spacer-sm; }
+  &:last-child  { margin-left: $spacer-sm; }
+
+  h4 {
+    padding: $spacer-xs $spacer-sm;
+    margin: 0 0 $spacer-xs;
+  }
+
+  .panel {
+    padding: $spacer;
+  }
+
+}
+
+.file-desc {
+  font-size: .9rem;
+
+
+  > div {
+    margin: 0 0 $spacer-sm;
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  label {
+    font-weight: 200;
+  }
+}

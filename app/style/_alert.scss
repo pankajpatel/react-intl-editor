@@ -1,0 +1,19 @@
+
+@mixin makeAlert($color) {
+  background: $color;
+  color: white;
+}
+
+.alert {
+  font-size: .85rem;
+  padding: $spacer-sm;
+  margin-bottom: $spacer-sm;
+  background: $brand-primary;
+  color: white;
+  border-radius: $radius;
+}
+
+.alert-danger   { @include makeAlert($brand-danger); }
+.alert-warning  { @include makeAlert($brand-warning); }
+.alert-success  { @include makeAlert($brand-success); }
+.alert-info     { @include makeAlert($brand-info); }

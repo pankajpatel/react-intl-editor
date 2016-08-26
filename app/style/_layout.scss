@@ -1,12 +1,80 @@
+html, body {
+  padding: 0;
+  margin: 0;
+}
+
 body {
-  background-color: #232C39;
   font-family: Helvetica Neue, Helvetica, Arial;
   font-weight: 300;
-  color: white;
+  color: $body-color;
 }
 
-.container {
-  font-weight: 100;
-}
+/*  Main tags reset
+------------------------------------------------------------------------------*/
 
 h1, h2, h3, h4, h5 { font-weight: 200; }
+
+
+/*  Main Layout components
+------------------------------------------------------------------------------*/
+
+article {
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  overflow: hidden;
+}
+
+header {
+  background: $brand-primary;
+  color: white;
+  margin: 0;
+  padding: $spacer-sm $spacer;
+
+  .logo { margin-right: $spacer-sm; }
+
+  h1 { margin: 0; }
+}
+
+section {
+  padding: $spacer-sm $spacer;
+
+  + section { padding-top: 0; }
+}
+
+.panel {
+  background: $gray-lightest;
+  padding: $spacer-sm $spacer;
+  border-left: 3px solid $gray-lighter;
+}
+
+.scroll {
+  overflow-y: auto;
+}
+
+
+/*  Space, alignments, text decoration
+------------------------------------------------------------------------------*/
+
+@each $v in (0, 1) {
+  .p-#{$v} { padding: #{$v}rem; }
+  .m-#{$v} { margin:  #{$v}rem; }
+
+  @each $let, $side in ( t: top, r: right, b: bottom, l: left ) {
+    .p-#{$let}-#{$v} { padding-#{$side}: #{$v}rem; }
+    .m-#{$let}-#{$v} { margin-#{$side}:  #{$v}rem; }
+  }
+}
+
+small, .small  { font-size: .9rem; }
+.smaller       { font-size: .8rem; }
+
+.text-primary  { color: $brand-primary; }
+.text-danger   { color: $brand-danger; }
+.text-warning  { color: $brand-warning; }
+.text-success  { color: $brand-success; }
+.text-info     { color: $brand-info; }
+.text-muted    { opacity: .7; }
+
+.text-left   { text-align: left; }
+.text-center { text-align: center; }
+.text-right  { text-align: right; }

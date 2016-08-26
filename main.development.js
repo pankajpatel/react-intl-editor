@@ -1,9 +1,10 @@
-import { app, BrowserWindow, Menu, shell } from 'electron';
+import { app, BrowserWindow, Menu, shell, dialog } from 'electron';
 
 let menu;
 let template;
 let mainWindow = null;
 
+global.sharedObj = { dirty: false };
 
 if (process.env.NODE_ENV === 'development') {
   require('electron-debug')(); // eslint-disable-line global-require
@@ -11,7 +12,8 @@ if (process.env.NODE_ENV === 'development') {
 
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+  // if (process.platform !== 'darwin')
+  app.quit();
 });
 
 
@@ -48,6 +50,25 @@ app.on('ready', async () => {
     mainWindow.focus();
   });
 
+  // Validate close if dirty
+  mainWindow.on('close', (e) => {
+    const { dirty } = global.sharedObj
+    if (!dirty) return
+
+    e.preventDefault()
+    dialog.showMessageBox(mainWindow, {
+      type: "question",
+      buttons: ["Cancel", "OK"],
+      message: "Close without saving ?",
+      detail: "This will loose all your changes"
+    }, function(res) {
+      if (res == 1) {
+        global.sharedObj.dirty = false
+        mainWindow.destroy()
+      }
+    })
+  })
+
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
@@ -57,20 +78,22 @@ app.on('ready', async () => {
     mainWindow.webContents.on('context-menu', (e, props) => {
       const { x, y } = props;
 
-      Menu.buildFromTemplate([{
-        label: 'Inspect element',
-        click() {
-          mainWindow.inspectElement(x, y);
+      Menu.buildFromTemplate([
+        {
+          label: 'Inspect element',
+          click() {
+            mainWindow.inspectElement(x, y);
+          }
         }
-      }]).popup(mainWindow);
+      ]).popup(mainWindow);
     });
   }
 
   if (process.platform === 'darwin') {
     template = [{
-      label: 'Electron',
+      label: 'Translation Editor',
       submenu: [{
-        label: 'About ElectronReact',
+        label: 'About Translation Editor',
         selector: 'orderFrontStandardAboutPanel:'
       }, {
         type: 'separator'
@@ -80,7 +103,7 @@ app.on('ready', async () => {
       }, {
         type: 'separator'
       }, {
-        label: 'Hide ElectronReact',
+        label: 'Hide Translation Editor',
         accelerator: 'Command+H',
         selector: 'hide:'
       }, {
@@ -176,22 +199,17 @@ app.on('ready', async () => {
       submenu: [{
         label: 'Learn More',
         click() {
-          shell.openExternal('http://electron.atom.io');
+          shell.openExternal('https://bitbucket.org/bflower/react-intl-editor');
         }
       }, {
         label: 'Documentation',
         click() {
-          shell.openExternal('https://github.com/atom/electron/tree/master/docs#readme');
-        }
-      }, {
-        label: 'Community Discussions',
-        click() {
-          shell.openExternal('https://discuss.atom.io/c/electron');
+          shell.openExternal('https://bitbucket.org/bflower/react-intl-editor/wiki/Home');
         }
       }, {
         label: 'Search Issues',
         click() {
-          shell.openExternal('https://github.com/atom/electron/issues');
+          shell.openExternal('https://bitbucket.org/bflower/react-intl-editor/issues?status=new&status=open');
         }
       }]
     }];
@@ -243,22 +261,17 @@ app.on('ready', async () => {
       submenu: [{
         label: 'Learn More',
         click() {
-          shell.openExternal('http://electron.atom.io');
+          shell.openExternal('https://bitbucket.org/bflower/react-intl-editor');
         }
       }, {
         label: 'Documentation',
         click() {
-          shell.openExternal('https://github.com/atom/electron/tree/master/docs#readme');
-        }
-      }, {
-        label: 'Community Discussions',
-        click() {
-          shell.openExternal('https://discuss.atom.io/c/electron');
+          shell.openExternal('https://bitbucket.org/bflower/react-intl-editor/wiki/Home');
         }
       }, {
         label: 'Search Issues',
         click() {
-          shell.openExternal('https://github.com/atom/electron/issues');
+          shell.openExternal('https://bitbucket.org/bflower/react-intl-editor/issues?status=new&status=open');
         }
       }]
     }];
