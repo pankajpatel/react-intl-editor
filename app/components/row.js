@@ -1,8 +1,18 @@
+import R from 'ramda'
 import React from 'react'
 import reactStamp from 'react-stamp'
 import cn from 'classnames'
 
 const { func, string } = React.PropTypes
+
+function cleanMessage(str) {
+  return R.pipe(
+    R.split("\n"),
+    R.map(R.trim),
+    R.join("\n")
+  )(str)
+}
+
 
 export const Header = () => (
   <div className="list-header transunit">
@@ -46,7 +56,18 @@ export const Row = reactStamp(React).compose({
     this._onChange    = this._onChange.bind(this)
     this._copyDefault = this._copyDefault.bind(this)
 
-    this.state.message = this.props.message
+    this.state.message = cleanMessage(this.props.message)
+  },
+
+  _updateMessage({ id, message }) {
+    const {
+      updateMessage,
+      message: savedMessage
+    } = this.props
+    const clean = cleanMessage(message)
+    if (clean == savedMessage) return
+
+    updateMessage({ id, message: clean })
   },
 
   _onChange(evt) {
@@ -55,15 +76,15 @@ export const Row = reactStamp(React).compose({
   },
 
   _onBlur(evt) {
-    const { id, updateMessage } = this.props
+    const { id } = this.props
     const { target: { value } } = evt
-    updateMessage({ id, message: value })
+    this._updateMessage({ id, message: value })
   },
 
   _copyDefault() {
-    const { id, defaultMessage, updateMessage } = this.props
+    const { id, defaultMessage } = this.props
     this.setState({ message: defaultMessage })
-    updateMessage({ id, message: defaultMessage })
+    this._updateMessage({ id, message: defaultMessage })
   },
 
   render() {
@@ -90,9 +111,7 @@ export const Row = reactStamp(React).compose({
         </div>
         </div>
         <div className="list-cell flex-2">
-          <span className="form-control-static">
-            {defaultMessage}
-          </span>
+          <span className="form-control-static" dangerouslySetInnerHTML={{ __html: defaultMessage.replace("\n", '<br/>') }}/>
         </div>
         <div className="list-cell flex-content">
           <a onClick={ this._copyDefault }>

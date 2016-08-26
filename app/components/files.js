@@ -126,7 +126,10 @@ const Files = reactStamp(React).compose({
       <div className="file-desc">
         <div className="flex-row">
           <label className="flex-1">File</label>
-          <div className="flex-3">{filename}</div>
+          <div className="flex-3">
+            { (name == 'catalog') && this._renderFlag(filename) }
+            {filename}
+          </div>
         </div>
         <div className="flex-row">
           <label className="flex-1">Size</label>
@@ -143,6 +146,17 @@ const Files = reactStamp(React).compose({
           </a>
         </div>
       </div>
+    )
+  },
+
+  _renderFlag(filename) {
+    const { 0: cult } = filename.split('.')
+    const { 0: lang } = (cult.length > 3) ? cult.split('-') : [cult]
+
+    return (
+      <span className="flag">
+        <img src={`./images/flags/${lang}.svg`}/>
+      </span>
     )
   }
 })

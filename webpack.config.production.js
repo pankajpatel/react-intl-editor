@@ -18,7 +18,7 @@ const config = merge(baseConfig, {
     loaders: [
       {
         test: /\.scss$/i,
-        loader: extractCSS.extract(['css','sass'])
+        loader: extractCSS.extract(['style', 'css','sass'])
       }
     ]
   },
