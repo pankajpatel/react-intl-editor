@@ -16,8 +16,15 @@
   &.has-error {
     border-color: $brand-danger;
   }
+
   &.has-success {
     border-color: $brand-success;
+  }
+
+  &.whitelisted {
+    color: $gray-light;
+
+    textarea { background: none; border: none;}
   }
 
   .default-msg {

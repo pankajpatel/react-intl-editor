@@ -10,7 +10,7 @@ export const FILE_DESC = [
       { code: 'length',  fn: R.length },
       { code: 'content', fn: R.all(validateDefaultMessageFile) },
     ],
-    help: "This file contains original strings and description of their usage. It can not be modified."
+    help: "Original strings and description of their usage. It can not be modified."
   },
   {
     name: 'catalog',
@@ -20,7 +20,15 @@ export const FILE_DESC = [
       { code: 'shape',  fn: R.pipe(R.isArrayLike, R.not) },
       { code: 'length', fn: R.pipe(R.values, R.length) },
     ],
-    help: "This file contains only translated strings (one file per language)."
+    help: "Translated strings (one file per language)."
+  },
+  {
+    name: 'whitelist',
+    label: 'White list (optional)',
+    validators: [
+      { code: 'shape',   fn: R.isArrayLike },
+    ],
+    help: "Translations that are the same as original message (source)."
   }
 ]
 

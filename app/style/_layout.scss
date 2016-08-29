@@ -14,6 +14,7 @@ body {
 
 h1, h2, h3, h4, h5 { font-weight: 200; }
 
+a { cursor: pointer; }
 
 /*  Main Layout components
 ------------------------------------------------------------------------------*/
@@ -29,10 +30,16 @@ header {
   color: white;
   margin: 0;
   padding: $spacer-sm $spacer;
+  line-height: 2rem;
+  font-weight: 100;
 
   .logo { margin-right: $spacer-sm; }
 
-  h1 { margin: 0; }
+  h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 100;
+  }
 }
 
 section {

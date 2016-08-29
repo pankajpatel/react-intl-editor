@@ -13,7 +13,7 @@ export function cleanMessage(str) {
   )(str)
 }
 
-export function makeFile(filename, transunits) {
+export function makeCatalogFile(filename, transunits) {
   var data = R.pipe(
     R.values,
     R.map( tu => ([ tu.id, cleanMessage(tu.message) ])),
@@ -27,5 +27,22 @@ export function makeFile(filename, transunits) {
   elem.click()
   elem.remove()
 
-  setDirty(false)
+  setDirty('catalog', false)
+}
+
+export function makeWhitelistFile(filename, transunits) {
+  var data = R.pipe(
+    R.filter(R.propEq('whitelisted', true)),
+    R.pluck('id'),
+    R.values
+  )(transunits)
+
+  var text = JSON.stringify(data, null, "\t")
+  var elem = document.createElement('a')
+  elem.setAttribute('href', 'data:application/jsoncharset=utf-8,' + encodeURI(text))
+  elem.setAttribute('download', filename)
+  elem.click()
+  elem.remove()
+
+  setDirty('whitelist', false)
 }

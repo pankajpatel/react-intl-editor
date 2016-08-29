@@ -1,4 +1,8 @@
 
+@mixin makeButton($color) {
+  color: $color;
+}
+
 .btn {
   display: inline-block;
   border: 1px solid;
@@ -15,4 +19,34 @@
   &:active {
     transform: scale(.95);
   }
+
+  + .btn {
+    margin-left: $spacer-sm;
+  }
 }
+
+/* Color variants */
+
+.btn-primary  { @include makeButton($brand-primary); }
+.btn-danger   { @include makeButton($brand-danger); }
+.btn-warning  { @include makeButton($brand-warning); }
+.btn-success  { @include makeButton($brand-success); }
+.btn-info     { @include makeButton($brand-info); }
+
+/* Tag variants */
+
+.tag {
+  display: inline-block;
+  padding: 0 $spacer-xs;
+  // border: 1px solid;
+  font-size: .85rem;
+  border-radius: $radius;
+}
+
+.tag-primary  { @include makeButton($brand-primary); }
+.tag-danger   { @include makeButton($brand-danger); }
+.tag-warning  { @include makeButton($brand-warning); }
+.tag-success  { @include makeButton($brand-success); }
+.tag-info     { @include makeButton($brand-info); }
+
+// .tag-stroke   { text-decoration: line-through; color: $gray-light; }

@@ -3,8 +3,9 @@ import React from 'react'
 import reactStamp from 'react-stamp'
 import { connect } from 'react-redux'
 import { buildFilter } from 'lib/search_list'
-import { setDirty } from 'lib/dirty'
+// import { setDirty } from 'lib/dirty'
 
+import * as fileMod from 'redux/modules/files.mod'
 import * as tuMod from 'redux/modules/transunit.mod'
 
 import { Header, Row } from './row'
@@ -64,10 +65,11 @@ const List = reactStamp(React).compose({
   },
 
   renderRow(transunit) {
-    const { updateMessage } = this.props
+    const { updateMessage, files: { whitelist } } = this.props
     const { id } = transunit
     return <Row key={id}
                 updateMessage={ updateMessage }
+                showWhitelist={ whitelist && whitelist.name ? true : false }
                 {...transunit}
                 />
   }
@@ -95,6 +97,7 @@ function stateToProps(state) {
   }
 
   return {
+    files: fileMod.getFiles(state),
     transunits: searchListIds.filter(R.values(list), current)
   }
 }
@@ -103,7 +106,7 @@ function dispatchToProps(dispatch) {
   return {
     updateMessage(values) {
       dispatch(tuMod.updateEntity(values))
-      setDirty(true)
+      // setDirty(fileName, true)
     },
   }
 }

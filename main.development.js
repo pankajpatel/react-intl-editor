@@ -1,10 +1,14 @@
+import R from 'ramda'
 import { app, BrowserWindow, Menu, shell, dialog } from 'electron';
 
 let menu;
 let template;
 let mainWindow = null;
 
-global.sharedObj = { dirty: false };
+global.dirty = {
+  catalog:   false,
+  whitelist: false
+};
 
 if (process.env.NODE_ENV === 'development') {
   require('electron-debug')(); // eslint-disable-line global-require
@@ -52,18 +56,21 @@ app.on('ready', async () => {
 
   // Validate close if dirty
   mainWindow.on('close', (e) => {
-    const { dirty } = global.sharedObj
-    if (!dirty) return
+    const isDirty   = R.pipe(
+      R.values,
+      R.any(R.identity)
+    )(global.dirty)
+    if (!isDirty) return
 
     e.preventDefault()
     dialog.showMessageBox(mainWindow, {
       type: "question",
       buttons: ["Cancel", "OK"],
       message: "Close without saving ?",
-      detail: "This will loose all your changes"
+      detail: "Unsaved changes will be lost."
     }, function(res) {
       if (res == 1) {
-        global.sharedObj.dirty = false
+        global.dirty = R.map( v => (false), global.dirty)
         mainWindow.destroy()
       }
     })

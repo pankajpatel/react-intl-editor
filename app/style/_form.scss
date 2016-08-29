@@ -19,6 +19,11 @@
     box-shadow: 0 1px $brand-primary;
     outline: none;
   }
+
+  &[disabled] {
+    box-shadow: none;
+    cursor: not-allowed;
+  }
 }
 
 .form-control-static {

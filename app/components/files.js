@@ -47,23 +47,32 @@ function validateFileData(name, data) {
     }, [], fileDesc.validators)
 }
 
+/**
+ * @param current {Object} current files
+ * @param next    {Object} next files
+ */
+function filesChanged(current, next) {
+  const changes = fileMod.FILE_DESC.map( d => {
+    return !R.equals(R.path(['name'], current[d.name]), R.path(['name'], next[d.name]))
+  })
+  return R.any(R.identity, changes)
+}
+
 const Files = reactStamp(React).compose({
 
   propTypes: {
     files         : object.isRequired,
     storeFile     : func.isRequired,
     makeTransunits: func.isRequired,
+    downloadFile  : func.isRequired,
   },
 
   componentWillReceiveProps(nextProps) {
-    const { files: { defaultMsg , catalog } } = this.props
-    const { files: { defaultMsg: defaultMsgNext , catalog: catalogNext } } = nextProps
     const { makeTransunits } = this.props
 
-    if ( !R.equals(R.path(['name'], defaultMsg), R.path(['name'], defaultMsgNext)) ||
-         !R.equals(R.path(['name'], catalog), R.path(['name'], catalogNext)) ) {
-        makeTransunits(nextProps.files)
-      }
+    if (filesChanged(this.props.files, nextProps.files)) {
+      makeTransunits(nextProps.files)
+    }
   },
 
   fileChanged(evt, name) {
@@ -75,10 +84,16 @@ const Files = reactStamp(React).compose({
 
   _resetFile(name) {
     const { resetFile } = this.props
-    if (isDirty()) {
-      if (!confirm("Close and loose every changes done ?")) return
+
+    if (isDirty(name)) {
+      if (confirm("Close and loose your changes ?")) {
+        resetFile(name)
+      } else {
+        return
+      }
+    } else {
+      resetFile(name)
     }
-    resetFile(name)
   },
 
   render() {
@@ -119,6 +134,7 @@ const Files = reactStamp(React).compose({
   },
 
   _renderFileDesc(file, name) {
+    const { downloadFile } = this.props
     const { name: filename, size, lastModified } = file
     const updatedAt = new Date(lastModified)
 
@@ -140,6 +156,13 @@ const Files = reactStamp(React).compose({
           <div className="flex-3">{updatedAt.toLocaleString()}</div>
         </div>
         <div className="text-right">
+          {
+            (name != 'defaultMsg') &&
+            <a className="btn btn-primary" onClick={ () => downloadFile(name) }>
+              <i className="fa fa-fw fa-download"/>
+              Download
+            </a>
+          }
           <a className="btn" onClick={ () => this._resetFile(name) }>
             <i className="fa fa-fw fa-undo"/>
             Cancel
@@ -176,11 +199,11 @@ const Files = reactStamp(React).compose({
    return {
      storeFile(name, file, data) {
        dispatch(fileMod.storeFile(name, file, data))
-       setDirty(false)
+       setDirty(name, false)
      },
      resetFile(name) {
        dispatch(fileMod.resetFile(name))
-       setDirty(false)
+       setDirty(name, false)
      },
      makeTransunits(files) {
        dispatch(tuMod.makeEntities(files))

@@ -13,6 +13,7 @@
   border-radius: $radius;
 }
 
+.alert-primary  { @include makeAlert($brand-primary); }
 .alert-danger   { @include makeAlert($brand-danger); }
 .alert-warning  { @include makeAlert($brand-warning); }
 .alert-success  { @include makeAlert($brand-success); }

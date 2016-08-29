@@ -6,7 +6,8 @@ import { connect } from 'react-redux'
 import * as fileMod from 'redux/modules/files.mod'
 import * as tuMod from 'redux/modules/transunit.mod'
 
-import { makeFile } from './_utils'
+import { isDirty } from 'lib/dirty'
+import { makeCatalogFile, makeWhitelistFile } from './_utils'
 
 import Files from './files.js'
 import List from './list'
@@ -22,12 +23,18 @@ const Home = reactStamp(React).compose({
   },
 
   init() {
-    this.downloadFile = this.downloadFile.bind(this)
+    this._downloadFile = this._downloadFile.bind(this)
   },
 
-  downloadFile() {
-    const { files: { catalog }, transunits } = this.props
-    makeFile(catalog.name, transunits)
+  _downloadFile(name) {
+    const { files, transunits } = this.props
+    switch(name) {
+      case 'catalog':
+        return makeCatalogFile(files.catalog.name, transunits)
+      case 'whitelist':
+        return makeWhitelistFile(files.whitelist.name, transunits)
+      // defaultMessage not editable => not downloadable
+    }
   },
 
   hasTransunits() {
@@ -49,27 +56,32 @@ const Home = reactStamp(React).compose({
               <h1>Translation editor</h1>
             </div>
             <div className="flex-content">
-              { hasTu && this.renderSave() }
+              {
+                isDirty() && <span>Unsaved changes</span>
+              }
             </div>
           </div>
         </header>
 
         <section className="flex-content">
-          <Files/>
+          <Files downloadFile={this._downloadFile}/>
         </section>
         { hasTu && this.renderSearch() }
         { hasTu && this.renderList() }
       </div>
     );
+    // <div className="flex-content">
+    //   { hasTu && this.renderSave() }
+    // </div>
   },
 
-  renderSave() {
-    return (
-      <a className="btn" onClick={ this.downloadFile }>
-        <i className="fa fa-fw fa-download"/> Save
-      </a>
-    )
-  },
+  // renderSave() {
+  //   return (
+  //     <a className="btn" onClick={ this.downloadFile }>
+  //       <i className="fa fa-fw fa-download"/> Save
+  //     </a>
+  //   )
+  // },
 
   renderSearch() {
     if (!this.hasTransunits()) return
@@ -84,9 +96,10 @@ const Home = reactStamp(React).compose({
 
   renderList() {
     if (!this.hasTransunits()) return
+
     return (
       <section className="flex-1 flex-column">
-        <List />
+        <List/>
       </section>
     )
   }
