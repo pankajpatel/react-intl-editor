@@ -1,18 +1,11 @@
-import R from 'ramda'
 import React from 'react'
 import reactStamp from 'react-stamp'
 import cn from 'classnames'
 
+import { cleanMessage } from './_utils'
+
+
 const { func, string } = React.PropTypes
-
-function cleanMessage(str) {
-  return R.pipe(
-    R.split("\n"),
-    R.map(R.trim),
-    R.join("\n")
-  )(str)
-}
-
 
 export const Header = () => (
   <div className="list-header transunit">
@@ -101,8 +94,8 @@ export const Row = reactStamp(React).compose({
     return (
       <div className={cls}>
         <div className="list-cell flex-2">
-        <div className="form-control-static">
-          <div className="smaller text-muted">
+        <div className="form-control-static text-muted">
+          <div className="smaller">
             {id}
           </div>
           <div className="small">
@@ -111,7 +104,7 @@ export const Row = reactStamp(React).compose({
         </div>
         </div>
         <div className="list-cell flex-2">
-          <span className="form-control-static" dangerouslySetInnerHTML={{ __html: defaultMessage.replace("\n", '<br/>') }}/>
+          <span className="form-control-static default-msg" dangerouslySetInnerHTML={{ __html: defaultMessage.replace("\n", '<br/>') }}/>
         </div>
         <div className="list-cell flex-content">
           <a onClick={ this._copyDefault }>

@@ -16,7 +16,8 @@
     "start": "cross-env NODE_ENV=production electron ./",
     "start-hot": "cross-env HOT=1 NODE_ENV=development electron -r babel-register -r babel-polyfill ./main.development",
     "package": "cross-env NODE_ENV=production node -r babel-register package.js",
-    "package-all": "npm run package -- --all",
+    "package-self": "npm run package -- -n=TranslationEditor -i=icon",
+    "package-all": "npm run package -- -n=TranslationEditor -i=icon --all",
     "postinstall": "node node_modules/fbjs-scripts/node/check-dev-engines.js package.json",
     "dev": "concurrently --kill-others \"npm run hot-server\" \"npm run start-hot\""
   },
@@ -87,8 +88,8 @@
     "node-libs-browser": "^1.0.0",
     "node-sass": "^3.8.0",
     "react-addons-test-utils": "^15.3.0",
-    "redux-freeze-state": "^1.0.0",
     "redux-logger": "^2.6.1",
+    "resolve-url-loader": "^1.6.0",
     "sass-loader": "^4.0.0",
     "sinon": "^1.17.4",
     "spectron": "^3.2.6",
@@ -101,6 +102,7 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "css-modules-require-hook": "^4.0.1",
+    "electron-devtools-installer": "^2.0.1",
     "font-awesome": "^4.6.3",
     "lodash.debounce": "^4.0.8",
     "postcss": "^5.1.0",

@@ -1,6 +1,5 @@
 /* globals window */
 import { createStore, applyMiddleware, compose } from 'redux'
-import freezeState from 'redux-freeze-state'
 import thunk from 'redux-thunk'
 import createLogger from 'redux-logger'
 import { hashHistory } from 'react-router'

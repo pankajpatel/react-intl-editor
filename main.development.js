@@ -18,7 +18,7 @@ app.on('window-all-closed', () => {
 
 
 const installExtensions = async () => {
-  if (process.env.NODE_ENV === 'development') {
+  // if (process.env.NODE_ENV === 'development') {
     const installer = require('electron-devtools-installer'); // eslint-disable-line global-require
 
     const extensions = [
@@ -31,7 +31,7 @@ const installExtensions = async () => {
         await installer.default(installer[name], forceDownload);
       } catch (e) {} // eslint-disable-line
     }
-  }
+  // }
 };
 
 app.on('ready', async () => {
@@ -150,7 +150,17 @@ app.on('ready', async () => {
         label: 'Select All',
         accelerator: 'Command+A',
         selector: 'selectAll:'
-      }]
+      },
+      /* debug */
+      {
+        label: 'Toggle Developer Tools',
+        accelerator: 'Alt+Command+I',
+        click() {
+          mainWindow.toggleDevTools();
+        }
+      }
+      /* /debug */
+      ]
     }, {
       label: 'View',
       submenu: (process.env.NODE_ENV === 'development') ? [{

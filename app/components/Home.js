@@ -6,30 +6,13 @@ import { connect } from 'react-redux'
 import * as fileMod from 'redux/modules/files.mod'
 import * as tuMod from 'redux/modules/transunit.mod'
 
-import { setDirty } from 'lib/dirty'
+import { makeFile } from './_utils'
 
 import Files from './files.js'
 import List from './list'
 import Search from './search'
 
 const { object } = React.PropTypes
-
-function makeFile(filename, transunits) {
-  var data = R.pipe(
-    R.values,
-    R.map( tu => ([ tu.id, tu.message ])),
-    R.fromPairs
-  )(transunits)
-
-  var text = JSON.stringify(data, null, "\t")
-  var elem = document.createElement('a')
-  elem.setAttribute('href', 'data:application/jsoncharset=utf-8,' + encodeURI(text))
-  elem.setAttribute('download', filename)
-  elem.click()
-  elem.remove()
-
-  setDirty(false)
-}
 
 const Home = reactStamp(React).compose({
 
