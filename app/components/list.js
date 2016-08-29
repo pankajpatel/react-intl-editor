@@ -25,6 +25,10 @@ const searchList = buildFilter()
     c  => c.untranslated,
     () => R.propEq('translated', false)
   )
+  .addFilter(
+    c  => c.whitelisted,
+    () => R.propEq('whitelisted', true)
+  )
 
 const searchListIds = buildFilter()
   .addFilter(
@@ -54,7 +58,7 @@ const List = reactStamp(React).compose({
 
     return (
       <div className="list">
-        <Header/>
+        <Header nb={transunits.length}/>
         <div className="list-body">
           {
             transunits.map( this.renderRow )

@@ -7,7 +7,7 @@ import { cleanMessage } from './_utils'
 
 const { func, string, bool } = React.PropTypes
 
-export const Header = () => (
+export const Header = ({ nb }) => (
   <div className="list-header transunit">
     <div className="list-cell flex-2">
       <span className="form-control-static">
@@ -16,7 +16,7 @@ export const Header = () => (
     </div>
     <div className="list-cell flex-2">
       <span className="form-control-static">
-        Source
+        Source ({nb})
       </span>
     </div>
     <div className="list-cell flex-content">

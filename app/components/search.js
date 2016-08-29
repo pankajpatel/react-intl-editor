@@ -8,7 +8,7 @@ import Form, { Input, Checkbox } from './form.comp'
 const { object } = React.PropTypes
 
 const FORM_NAME = 'transunitSearchForm'
-const fields = ['filter', 'untranslated', 'counter']
+const fields = ['filter', 'untranslated', 'whitelisted', 'counter'] // counter used to force list refresh
 
 /*
   Component
@@ -32,7 +32,7 @@ const SearchForm = reactStamp(React).compose(SearchStamp, {
   },
 
   render: function() {
-    const { fields: { filter, untranslated } } = this.props
+    const { fields: { filter, untranslated, whitelisted } } = this.props
 
     return (
       <Form onSubmit={this.preventSubmit}>
@@ -46,6 +46,11 @@ const SearchForm = reactStamp(React).compose(SearchStamp, {
           <div className="flex-content">
             <div className="form-control-static">
               <Checkbox field={untranslated} label="Untranslated"/>
+            </div>
+          </div>
+          <div className="flex-content">
+            <div className="form-control-static">
+              <Checkbox field={whitelisted} label="Whitelist"/>
             </div>
           </div>
           <a className="btn flex-content" onClick={this._onSearch}>
