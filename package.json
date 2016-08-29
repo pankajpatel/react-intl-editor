@@ -102,7 +102,6 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "css-modules-require-hook": "^4.0.1",
-    "electron-devtools-installer": "^2.0.1",
     "font-awesome": "^4.6.3",
     "lodash.debounce": "^4.0.8",
     "postcss": "^5.1.0",

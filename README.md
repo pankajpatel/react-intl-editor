@@ -42,7 +42,19 @@ $ npm run dev
 
 ### Run release executables
 
-Executables for MacOS, Linux & Windows are located in the "release" directory
+Build binaries for your platform by running
+
+```bash
+$ npm run package-self
+```
+
+Build for all platforms (Mac, Linux, Windows)
+
+```bash
+$ npm run package-all
+```
+
+Builded executables are located in the "release" directory
 
 
 ## @todo & next steps
