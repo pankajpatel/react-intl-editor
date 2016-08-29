@@ -40,15 +40,15 @@ $ npm run dev
 
 *Note: requires a node version >= 4 and an npm version >= 2.*
 
-### Run release executables
+### Build executables
 
-Build binaries for your platform by running
+Package for your platform by running
 
 ```bash
 $ npm run package-self
 ```
 
-Build for all platforms (Mac, Linux, Windows)
+Package for all platforms (Mac, Linux, Windows)
 
 ```bash
 $ npm run package-all
