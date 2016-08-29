@@ -47,8 +47,8 @@ Executables for MacOS, Linux & Windows are located in the "release" directory
 
 ## @todo & next steps
 
+  - Support whitelist files (for untranslated flag)
   - Autoupdate with Squirrel
-  -
 
 ## License
 MIT © [b-flower](http://www.b-flower.com)
